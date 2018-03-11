@@ -19,9 +19,10 @@ module.exports = {
     play: function (socket, msg, pad, launchpad, gameUUID, uuid, queue) {
         pad.flash = false;
         // color last played col
+
         if (msg.data.last_play_col !== -1) {
             var color = msg.data.turn === uuid ? pad.red.full : pad.green.full;
-            pad.col(color, [msg.data.last_play_col, Math.abs(msg.data.last_play_line - 7)]);
+            common.downLight(pad, color, msg.data.last_play_col, 0, Math.abs(msg.data.last_play_line - 7));
         }
 
         // game ended?

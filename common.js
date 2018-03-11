@@ -35,6 +35,23 @@ module.exports = {
             }
         }, 100);
     },
+    downLight: function(pad, color,col, fromLine, toLine) {
+        var currentLine = fromLine -1;
+        var int = setInterval(() => {
+            if (toLine > currentLine) {
+                currentLine++;
+            }
+            // erase previous light
+            if (currentLine > 0) {
+                pad.col(0, [col, currentLine -1]);
+            }
+            pad.col(color, [col, currentLine]);
+
+            if (toLine == currentLine) {
+                clearInterval(int);
+            }
+        }, 100);
+    },
     clearLoading: function() {
         if (loading) {
             clearInterval(loading);

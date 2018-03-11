@@ -8,8 +8,7 @@ var gameUUID = '';
 var game;
 var socket;
 var queue = sq.createQueue();
-pad.connect().then(() => {     // Auto-detect Launchpad
-
+pad.connect().then(() => {
     // connec socket io
     socket = require('socket.io-client')('http://localhost:5000');
     socket.open();
