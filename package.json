@@ -1,0 +1,13 @@
+{
+  "name": "launchpad-gameclient",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "launchpad-mini": "^2.1.2",
+    "simplequeue": "0.0.4",
+    "socket.io-client": "1.7.4"
+  }
+}
