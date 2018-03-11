@@ -2,15 +2,13 @@ const Launchpad = require('launchpad-mini'),
     pad = new Launchpad();
 const connect4 = require('./connect4');
 const common = require('./common');
-//var sq = require('simplequeue');
-
+var sq = require('simplequeue');
 var uuid = '';
 var gameUUID = '';
 var game;
 var socket;
-var queue;// = sq.createQueue();
+var queue = sq.createQueue();
 pad.connect().then(() => {     // Auto-detect Launchpad
-    pad.reset(0);
 
     // connec socket io
     socket = require('socket.io-client')('http://localhost:5000');
@@ -37,7 +35,7 @@ pad.connect().then(() => {     // Auto-detect Launchpad
 
         switch (msg.game) {
             case connect4.gameName():
-                connect4.play(socket, msg, pad, queue, Launchpad, gameUUID, uuid);
+                connect4.play(socket, msg, pad, Launchpad, gameUUID, uuid, queue);
                 break;
             default:
                 console.log('Unknown game: ' + msg.game);
@@ -65,6 +63,12 @@ pad.connect().then(() => {     // Auto-detect Launchpad
                 connect4.padEvent(socket, k, game, gameUUID, uuid);
         }
     });
+
+    queue.getMessage((e, msg) => {
+        if (msg && msg === 'reinit') {
+            resetGame(pad);
+        }
+    });
 });
 
 function getGameJoinEvent(line) {
@@ -83,6 +87,7 @@ function getMessage(resp) {
 }
 
 function init(pad) {
+    pad.reset(0);
     pad.col(pad.amber.full, [8, 0]);
 }
 
@@ -106,9 +111,9 @@ function resetGame(pad) {
     gameUUID = '';
     game = '';
 
-    this.clearLoading();
+    common.clearLoading();
     setTimeout(() => {
-        pad.reset(0);
+        init(pad);
     }, 3000);
-    init(pad);
+
 }

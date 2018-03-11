@@ -6,8 +6,9 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "events": "^2.0.0",
     "launchpad-mini": "^2.1.2",
-    "simplequeue": "0.0.4",
+    "simplequeue": "https://github.com/sguiheux/SimpleQueue/tarball/tmp",
     "socket.io-client": "1.7.4"
   }
 }

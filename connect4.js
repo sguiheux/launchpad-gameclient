@@ -16,7 +16,7 @@ module.exports = {
             pad.flash = true;
         });
     },
-    play: function (socket, msg, pad, queue, launchpad, gameUUID, uuid) {
+    play: function (socket, msg, pad, launchpad, gameUUID, uuid, queue) {
         pad.flash = false;
         // color last played col
         if (msg.data.last_play_col !== -1) {
@@ -31,6 +31,8 @@ module.exports = {
             } else {
                 common.displayFromPatter(pad, pad.red.full, common.crossPattern());
             }
+            common.clearLoading();
+            queue.putMessage('reinit');
             return;
         }
 
