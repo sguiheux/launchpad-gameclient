@@ -61,7 +61,7 @@ module.exports = {
         return loading;
     },
 
-    displayFromPatter: function(pad, color, data) {
+    displayFromPattern: function(pad, color, data) {
         pad.reset(0);
         pad.col(color, pad.fromPattern(data));
     },

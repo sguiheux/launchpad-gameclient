@@ -27,13 +27,20 @@ module.exports = {
 
         // game ended?
         if (msg.data.winner !== '') {
+            var endColor;
+            var endPattern;
             if (msg.data.winner === uuid) {
-                common.displayFromPatter(pad, pad.green.full, common.checkPattern());
+                endColor = pad.green.full;
+                endPattern = common.checkPattern();
             } else {
-                common.displayFromPatter(pad, pad.red.full, common.crossPattern());
+                endColor = pad.red.full;
+                endPattern = common.crossPattern();
             }
-            common.clearLoading();
-            queue.putMessage('reinit');
+            setTimeout(() => {
+                common.displayFromPattern(pad, endColor, endPattern);
+                common.clearLoading();
+                queue.putMessage('reinit');
+            }, 1000);
             return;
         }
 
