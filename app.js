@@ -10,10 +10,9 @@ var socket;
 var queue = sq.createQueue();
 pad.connect().then(() => {
     // connec socket io
-    socket = require('socket.io-client')('http://localhost:5000');
+    socket = require('socket.io-client')(process.argv[2]);
     socket.open();
     init(pad);
-
     // User heartbeat
     heartbeat(socket);
 
