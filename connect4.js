@@ -7,11 +7,8 @@ module.exports = {
             socket.emit("play.connect4", JSON.stringify(event));
         }
     },
-    joinEvent: function () {
-        return 'join.connect4';
-    },
     gameName: function () {
-        return GAME;
+        return "connect4";
     },
     socketEvent: function (socket, pad) {
         socket.on('eventConnect4Waiting', function () {
@@ -48,17 +45,16 @@ module.exports = {
                 for (var i = 0; i < 8; i++) {
                     if (msg.data.grid[i][7] === "") {
                         pad.col(pad.green.full, [i, 8]);
+                    } else {
+                        pad.col(pad.red.full, [i, 8]);
                     }
                 }
                 break;
             default:
                 common.clearLoading();
-                common.displayLoadingRight(pad, launchpad);
+                pad.col(0, launchpad.Buttons.Scene);
+                pad.col(0, launchpad.Buttons.Automap);
+                common.displayLoadingRight(pad, launchpad.Buttons.Scene);
         }
-
-
     }
 };
-
-
-const GAME = 'connect4';

@@ -24,6 +24,8 @@ pad.connect().then(() => {     // Auto-detect Launchpad
     socket.on('connect', function (resp) {
         connect(resp);
     });
+
+    // Receive play event from server
     socket.on('play', function (resp) {
         var msg = getMessage(resp);
         if (msg.status >= 300) {
@@ -32,12 +34,13 @@ pad.connect().then(() => {     // Auto-detect Launchpad
         }
         gameUUID = msg.game_uuid;
         game = msg.game;
-        switch(msg.game) {
+
+        switch (msg.game) {
             case connect4.gameName():
                 connect4.play(socket, msg, pad, queue, Launchpad, gameUUID, uuid);
                 break;
             default:
-                console.log('Unknown game: '+ msg.game);
+                console.log('Unknown game: ' + msg.game);
         }
     });
 
@@ -46,7 +49,7 @@ pad.connect().then(() => {     // Auto-detect Launchpad
     // Make Launchpad glow yellow
     pad.on('key', k => {
         if (gameUUID === '' && k.pressed && k.x === 8) {
-            socket.emit(getGameJoinEvent(k.y), uuid, (resp) => {
+            socket.emit("join", JSON.stringify({"game": getGameJoinEvent(k.y), "uuid": uuid}), (resp) => {
                 var msg = getMessage(resp);
                 if (msg && msg.status === 202) {
                     common.displayLoadingRight(pad, Launchpad.Buttons.Scene);
@@ -67,7 +70,7 @@ pad.connect().then(() => {     // Auto-detect Launchpad
 function getGameJoinEvent(line) {
     switch (line) {
         case 0:
-            return connect4.joinEvent();
+            return connect4.gameName();
     }
     return "";
 }
@@ -84,11 +87,9 @@ function init(pad) {
 }
 
 function connect(resp) {
-    if (resp) {
-        msg = JSON.parse(resp);
-        if (msg && msg.data) {
-            uuid = msg.data;
-        }
+    var msg = getMessage(resp);
+    if (msg && msg.data) {
+        uuid = msg.data;
     }
 }
 
@@ -101,7 +102,7 @@ function heartbeat(socket) {
     }, 60000);
 }
 
-function resetGame (pad) {
+function resetGame(pad) {
     gameUUID = '';
     game = '';
 
